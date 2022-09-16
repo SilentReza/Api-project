@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- page description -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A page for add user form server">
+    <meta name="keywords" content="name,mobile,email,id,index">
+    <title>Document</title>
+    <!-- style for page -->
+    <link rel="stylesheet" href="style.css">
+    <!-- bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+</head>
+
+<body class="container py-4" id="page-body">
+    <header>
+        <!-- start header navbar -->
+        <div class="navbar navbar-expand-md" id="page-navbar">
+            <a href="/" class="navbar-brand">Silent <span class="badge bg-dark p-2">Project</span></a>
+            <button class="btn navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse"
+                id="navbar-toggle">
+                <i class="navbar-toggler-icon"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <!-- start items -->
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Control</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Connect</a></li>
+                </ul>
+                <div class="d-md-none d-inline-block mt-md-0 mt-3 float-end" id="btn-sign">
+                    <button class="btn btn-dark">SignUp</button>
+                    <button class="btn btn-dark">SignIn</button>
+                </div>
+            </div>
+            <div class="d-md-inline-block d-none mt-md-0 mt-3 float-end" id="btn-sign">
+                <button class="btn btn-dark">SignUp</button>
+                <button class="btn btn-dark">SignIn</button>
+            </div>
+            <!-- end items -->
+        </div>
+        <!-- end header navbar -->
+    </header>
+    <article id="user" class="mt-5">
+        <!-- start main items -->
+        <div class="row">
+            <div class="col-md-4">
+                <!-- start form -->
+                <div class="card border-0">
+                    <div id="card-img">
+                        <img src="https://notesbythalia.com/wp-content/uploads/2022/03/coral-rose-desktop-mock-up-scaled.jpeg"
+                            alt="-signup" class="img-fluid card-img">
+                    </div>
+                    <div class="card-body">
+                        <div v-if="!isCorect" class="alert alert-danger" id="alert-form"
+                            v-for="(error, index) in errors" :key="index">
+                            <!-- if we have erro this div is show -->
+                            {{error}}
+                        </div>
+                        <div id="card-input">
+                            <!-- input to get user information -->
+                            <label for="user-name" class="form-label">Name</label>
+                            <input type="text" v-model="userName" id="user-name" name="name" class="form-control"
+                                required>
+                            <br>
+                            <label for="user-email" class="form-label">Email</label>
+                            <input type="email" v-model="userEmail" id="user-email" name="email" class="form-control"
+                                required>
+                            <br>
+                            <label for="user-number" class="form-label">Number</label>
+                            <input type="tel" v-model="userMobile" id="user-number" name="mobile" class="form-control"
+                                required>
+                            <br>
+                            <label class="form-label" for="user-condition">Condition</label>
+                            <select class="form-select" v-model="userCondition" id="user-condition">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                            <div class="d-grid mt-5" id="user-sender">
+                                <input type="submit" value="Submit" class="btn btn-dark" @click="addUsers">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end form -->
+            </div>
+            <div class="col-md-8">
+                <!-- start table to show users -->
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    <!-- name -->
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </th>
+                                <th>
+                                    <!-- email -->
+                                    <i class="fa-solid fa-envelope"></i>
+                                </th>
+                                <th>
+                                    <!-- mobile -->
+                                    <i class="fa-solid fa-mobile"></i>
+                                </th>
+                                <th>
+                                    <!-- status -->
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </th>
+                                <th>
+                                    <!-- buttons -->
+                                    <i class="fa-solid fa-play"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in allUsers" :key="index">
+                                <td style="width:100px ;">
+                                    <!-- array index -->
+                                    <p>{{index + 1}}</p>
+                                </td>
+                                <td style="width:100px ;">
+                                    <!-- username in server -->
+                                    <p v-if="!item.editMode">{{item.name}}</p>
+                                    <input v-else :value="item.name" type="text" v-model='editeName' id="edite-name"
+                                        name="editeName" class="form-control">
+                                </td>
+                                <td style="width:100px ;">
+                                    <!-- user email in server -->
+                                    <p v-if="!item.editMode">{{item.email}}</p>
+                                    <input v-else type="email" :value="item.email" v-model="editeEmail" id="edite-email"
+                                        name="editeEmail" class="form-control">
+                                </td>
+                                <td style="width:100px ;">
+                                    <!-- user mobile in server -->
+                                    <p v-if="!item.editMode">{{item.mobileno}}</p>
+                                    <input v-else type="tel" :value="item.mobileno" v-model="editeMobile"
+                                        id="edite-mobile" name="editeMobile" class="form-control">
+                                </td>
+                                <td style="width:100px ;" @click="changeStatus(item.id , item.status)">
+                                    {{item.statusText}}</td>
+                                <td style="width:100px ;">
+                                    <div class="d-flex justify-content-center">
+                                        <!-- delete -->
+                                        <button class="btn btn-dark" @click="deleteUsers(item.id)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                        <!-- edite -->
+                                        <button @click="openEditetoggle(index)" v-if="!item.editMode"
+                                            class="btn btn-dark ms-2">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                        <!-- complete edite -->
+                                        <button v-else class="btn btn-dark ms-2" @click="editUser(item.id , index)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <!-- end table -->
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- end program -->
+    </article>
+</body>
+<!-- scripts -->
+<!-- fontawesome kit -->
+<script src="https://kit.fontawesome.com/aefae34919.js" crossorigin="anonymous"></script>
+<!-- bootstrap js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+<!-- sweetalert old version CDN -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- vueJS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<!-- axios for api -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- script for page -->
+<script src="script.js"></script>
+
+</html>

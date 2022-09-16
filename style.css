@@ -1,0 +1,13 @@
+* {
+    font-family: iranyekan;
+    text-decoration: none;
+}
+
+*::selection {
+    background-color: black;
+    color: white;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
